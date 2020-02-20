@@ -5,16 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class Char : MonoBehaviour
 {
-    private Vector2 direction;
+    private Vector2 direction = Vector2.zero;
     [SerializeField] private int dirLeft;
     [SerializeField] private int dirRight;
     private bool checkPoint, finish;
 
-    Vector3 startPosition;
+    Vector3 startPosition = Vector3.zero;
     bool isCrashed = false;
-    //public Rigidbody2D rg;
-    //public int speed;
 
+    [SerializeField] private Transform finishPos;
+    [SerializeField] private float speed = 1;
+    
     void Start()
     {
         startPosition = gameObject.transform.position;
@@ -36,7 +37,7 @@ public class Char : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 if (!finish)
-                    transform.position += new Vector3(0, 1, 0 * Time.deltaTime);
+                    transform.Translate(Vector2.up);
             }
         }
     }
@@ -97,8 +98,10 @@ public class Char : MonoBehaviour
 
         if (collision.gameObject.tag == "finish")
         {
+            //gameObject.transform.Translate(finishPos.position * speed * Time.deltaTime);
             finish = true;
             direction.x = 0;
+            
             transform.position = new Vector3(0, 4.7f, 0 * Time.deltaTime);
             GameManager.instance.DestroyLevel();
             StartCoroutine(NextLevel());
