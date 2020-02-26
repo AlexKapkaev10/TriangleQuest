@@ -128,6 +128,7 @@ public class Char : MonoBehaviour
         GameManager.instance.curLevel++;
         GameManager.instance.LevelGeneric();
         GameManager.instance.UpdateResourse();
+        GameManager.instance.LinesActiv();
     }
     IEnumerator Restart()
     {

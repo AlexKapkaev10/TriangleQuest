@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public GameObject[] levels;
     Vector3 pointLevels;
 
+    public GameObject[] lines;
+    private int lineCount;
+
     public Text levelTxt;
 
     private void Awake()
@@ -26,9 +29,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
         LevelGeneric();
         UpdateResourse();
+        LinesActiv();
     }
 
     void Update()
@@ -44,6 +47,18 @@ public class GameManager : MonoBehaviour
     public void LevelGeneric()
     {
         currentLevel = Instantiate(levels[levelCount], pointLevels, Quaternion.identity);
+
+    }
+
+    public void LinesActiv()
+    {
+        lines[lineCount].gameObject.SetActive(false);
+        lineCount = Random.Range(0, 2);
+        //lineCount++;
+        //if (lineCount >= lines.Length)
+            //lineCount = 0;
+        Debug.Log(lineCount);
+        lines[lineCount].gameObject.SetActive(true);
     }
 
     public void DestroyLevel()
