@@ -32,6 +32,7 @@ public class Char : MonoBehaviour
 
     void MoveChar()
     {
+#if UNITY_EDITOR
         if (!isCrashed)
         {
             if (Input.GetMouseButtonDown(0))
@@ -40,16 +41,25 @@ public class Char : MonoBehaviour
                     transform.Translate(Vector2.up);
             }
         }
+
+#endif
+
+#if UNITY_IOS && UNITY_ANDROID
+        if (!isCrashed)
+        {
+            if (Input.touchCount > 0)
+            {
+                if (!finish)
+                    transform.Translate(Vector2.up);
+            }
+        }
+        
+#endif
     }
 
     void MoveCharCheckPoint()
     {
 #if UNITY_EDITOR
-
-#endif
-#if UNITY_IOS && UNITY_ANDROID
-        
-#endif
         if (!checkPoint)
         {
             transform.Translate(direction * Time.deltaTime);
@@ -70,6 +80,13 @@ public class Char : MonoBehaviour
                     transform.Translate(direction * Time.deltaTime);
             }
         }
+
+#endif
+#if UNITY_IOS && UNITY_ANDROID
+
+        
+#endif
+
     }
 
 
@@ -124,7 +141,6 @@ public class Char : MonoBehaviour
         isCrashed = false;
         finish = false;
         transform.position = startPosition;
-        GameManager.instance.levelCount++;
         GameManager.instance.curLevel++;
         GameManager.instance.LevelGeneric();
         GameManager.instance.UpdateResourse();

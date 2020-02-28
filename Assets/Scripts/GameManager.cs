@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelGeneric()
     {
+        levelCount = Random.Range(1, GameManager.instance.levels.Length);
         currentLevel = Instantiate(levels[levelCount], pointLevels, Quaternion.identity);
 
     }
@@ -53,10 +54,7 @@ public class GameManager : MonoBehaviour
     public void LinesActiv()
     {
         lines[lineCount].gameObject.SetActive(false);
-        lineCount = Random.Range(0, 2);
-        //lineCount++;
-        //if (lineCount >= lines.Length)
-            //lineCount = 0;
+        lineCount = Random.Range(0, lines.Length);
         Debug.Log(lineCount);
         lines[lineCount].gameObject.SetActive(true);
     }

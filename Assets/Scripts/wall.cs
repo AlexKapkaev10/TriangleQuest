@@ -4,18 +4,30 @@ using UnityEngine;
 
 public class wall : MonoBehaviour
 {
+    public Animator anim;
+
+    public AnimationClip slideClip;
+
+    public Animation animationComponent;
+
     public enum WallType
     {
         border,
-        obstacle
+        obstacle,
+        slide
     }
 
-    public static WallType myType;
+    public WallType myType;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
+        if(myType == WallType.slide)
+        {
+            animationComponent.clip = slideClip;
+            animationComponent.Play();
+        }
     }
 
     // Update is called once per frame
