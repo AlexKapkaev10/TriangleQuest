@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Char : MonoBehaviour
 {
@@ -38,7 +39,8 @@ public class Char : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 if (!finish)
-                    transform.Translate(Vector2.up);
+                    transform.DOMoveY(1, speed).SetRelative(true).SetEase(Ease.InFlash);
+                    //transform.Translate(Vector2.up);
             }
         }
 
@@ -115,11 +117,9 @@ public class Char : MonoBehaviour
 
         if (collision.gameObject.tag == "finish")
         {
-            //gameObject.transform.Translate(finishPos.position * speed * Time.deltaTime);
             finish = true;
             direction.x = 0;
-            
-            transform.position = new Vector3(0, 4.7f, 0 * Time.deltaTime);
+            transform.DOMove(new Vector3 (0, 4.7f, 0), 0.3f).SetRelative(false).SetEase(Ease.Linear);
             GameManager.instance.DestroyLevel();
             StartCoroutine(NextLevel());
         }
