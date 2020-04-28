@@ -2,23 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Char : MonoBehaviour
 {
     private Vector2 direction = Vector2.zero;
-    [SerializeField] private int dirLeft;
-    [SerializeField] private int dirRight;
-    private bool checkPoint, finish;
-
     Vector3 startPosition = Vector3.zero;
-    bool isCrashed = false;
+
+    [SerializeField] private float dirLeft;
+    [SerializeField] private float dirRight;
+    public int HP = 2;
+
+
+    private bool checkPoint, finish;
+    private bool isCrashed = false;
 
     [SerializeField] private Transform finishPos;
     [SerializeField] private float speed = 1;
-    
+
+    private delegate void OnMove();
+    private event OnMove OnMoved;
+
+    private CircleCollider2D colChar;
+
+    public GameObject effect;
+
+    public Transform effectPoint = null;
+
     void Start()
     {
+        colChar = GetComponent<CircleCollider2D>();
         startPosition = gameObject.transform.position;
+        OnMoved += MoveUp;
     }
 
     private void Update()
@@ -30,6 +45,13 @@ public class Char : MonoBehaviour
         }
     }
 
+    void MoveUp()
+    {
+        transform.DOMoveY(1, 0.1f).SetRelative(true).SetEase(Ease.Linear);
+        GameObject thisEffect = Instantiate(effect, effectPoint);
+        Destroy(thisEffect, 1);
+    }
+
     void MoveChar()
     {
 #if UNITY_EDITOR
@@ -37,8 +59,8 @@ public class Char : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (!finish)
-                    transform.Translate(Vector2.up);
+                if (!finish )
+                    OnMoved();
             }
         }
 
@@ -115,13 +137,23 @@ public class Char : MonoBehaviour
 
         if (collision.gameObject.tag == "finish")
         {
-            //gameObject.transform.Translate(finishPos.position * speed * Time.deltaTime);
             finish = true;
             direction.x = 0;
-            
+            transform.DOMove(new Vector3(0, 4.7f, 0), 0.3f).SetEase(Ease.Linear);
             transform.position = new Vector3(0, 4.7f, 0 * Time.deltaTime);
             GameManager.instance.DestroyLevel();
             StartCoroutine(NextLevel());
+        }
+        if (collision.gameObject.GetComponent<BonusSystem>() != null)
+        {
+            Destroy(collision.gameObject);
+            if(HP != 3)
+            {
+                GameManager.instance.lives[HP].enabled = true;
+                HP++;
+                Debug.Log(HP);
+                
+            }
         }
     }
 
@@ -131,27 +163,41 @@ public class Char : MonoBehaviour
         {
             direction.x = 0;
             isCrashed = true;
+            
+            HP--;
+            if (HP != 0)
+            {
+                GameManager.instance.lives[HP].enabled = false;
+            }
+            else
+                GameManager.instance.ActivGameOver();
+
             StartCoroutine(Restart());
 
         }
     }
     IEnumerator NextLevel()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         isCrashed = false;
         finish = false;
-        transform.position = startPosition;
+        colChar.enabled = false;
+        dirLeft -= 0.3f;
+        dirRight += 0.3f;
+        transform.DOMove(startPosition, 0.1f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
         GameManager.instance.curLevel++;
         GameManager.instance.LevelGeneric();
         GameManager.instance.UpdateResourse();
         GameManager.instance.LinesActiv();
     }
+
     IEnumerator Restart()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         isCrashed = false;
         finish = false;
-        transform.position = startPosition;
+        colChar.enabled = false;
+        transform.DOMove(startPosition, 0.3f).SetEase(Ease.Linear).OnComplete(() => colChar.enabled = true);
     }
 
 }

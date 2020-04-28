@@ -20,7 +20,12 @@ public class GameManager : MonoBehaviour
     public GameObject[] lines;
     private int lineCount;
 
+    public Image[] lives;
+    public int liveCount;
+
     public Text levelTxt;
+
+    public GameObject GameOver;
 
     private void Awake()
     {
@@ -29,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         LevelGeneric();
         UpdateResourse();
         LinesActiv();
@@ -55,7 +61,6 @@ public class GameManager : MonoBehaviour
     {
         lines[lineCount].gameObject.SetActive(false);
         lineCount = Random.Range(0, lines.Length);
-        Debug.Log(lineCount);
         lines[lineCount].gameObject.SetActive(true);
     }
 
@@ -68,4 +73,10 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+    public void ActivGameOver()
+    {
+        GameOver.SetActive(true);
+        Time.timeScale = 0;
+    }
+
 }
