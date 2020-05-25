@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4380104037708162439}
   - component: {fileID: 4380104037708162432}
   - component: {fileID: 4380104037708162435}
-  - component: {fileID: 4380104037708162434}
   - component: {fileID: 4380104037708162461}
   m_Layer: 0
   m_Name: Wall_Slide 1
@@ -124,23 +123,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   slideClip: {fileID: 7400000, guid: 059eee5d9e95f4b4f92466688999800b, type: 2}
-  animationComponent: {fileID: 4380104037708162434}
+  animationComponent: {fileID: 0}
   myType: 2
---- !u!111 &4380104037708162434
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4380104037708162433}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 059eee5d9e95f4b4f92466688999800b, type: 2}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!95 &4380104037708162461
 Animator:
   serializedVersion: 3

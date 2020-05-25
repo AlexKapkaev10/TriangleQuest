@@ -19,22 +19,6 @@ public class wall : MonoBehaviour
 
     public WallType myType;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        anim = GetComponent<Animator>();
-        if(myType == WallType.slide)
-        {
-            animationComponent.clip = slideClip;
-            animationComponent.Play();
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "char" )

@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public BonusSystem bonusSystem;
+
     public int levelCount;
 
     public float curLevel = 1;
@@ -27,6 +29,11 @@ public class GameManager : MonoBehaviour
 
     public GameObject GameOver;
 
+    private Vector2 _bonusPos = Vector2.zero;
+
+    [SerializeField] private float _minSpawnBonusX;
+    [SerializeField] private float _maxSpawnBonusX;
+
     private void Awake()
     {
         instance = this;
@@ -38,6 +45,7 @@ public class GameManager : MonoBehaviour
         LevelGeneric();
         UpdateResourse();
         LinesActiv();
+        //bonusSystem.SpawnBonus(_bonusPos);
     }
 
     void Update()
@@ -54,7 +62,8 @@ public class GameManager : MonoBehaviour
     {
         levelCount = Random.Range(1, GameManager.instance.levels.Length);
         currentLevel = Instantiate(levels[levelCount], pointLevels, Quaternion.identity);
-
+        _bonusPos = new Vector2(Random.Range(_minSpawnBonusX, _maxSpawnBonusX), 0);
+        bonusSystem.SpawnBonus(_bonusPos);
     }
 
     public void LinesActiv()

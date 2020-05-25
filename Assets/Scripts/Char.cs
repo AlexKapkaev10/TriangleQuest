@@ -115,7 +115,7 @@ public class Char : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "checkPoint")
+        if(collision.gameObject.tag == "checkPoint" || collision.gameObject.tag == "bonus") 
         {
             checkPoint = true;
         }
