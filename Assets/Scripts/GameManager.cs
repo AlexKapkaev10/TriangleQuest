@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public BonusSystem bonusSystem;
+    public SpawnBonuses spawnBonus;
 
     public int levelCount;
 
@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
         LevelGeneric();
         UpdateResourse();
         LinesActiv();
-        //bonusSystem.SpawnBonus(_bonusPos);
     }
 
     void Update()
@@ -63,7 +62,7 @@ public class GameManager : MonoBehaviour
         levelCount = Random.Range(1, GameManager.instance.levels.Length);
         currentLevel = Instantiate(levels[levelCount], pointLevels, Quaternion.identity);
         _bonusPos = new Vector2(Random.Range(_minSpawnBonusX, _maxSpawnBonusX), 0);
-        bonusSystem.SpawnBonus(_bonusPos);
+        spawnBonus.SpawnBonus(_bonusPos);
     }
 
     public void LinesActiv()

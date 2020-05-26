@@ -115,7 +115,7 @@ public class Char : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "checkPoint" || collision.gameObject.tag == "bonus") 
+        if(collision.gameObject.tag == "checkPoint" || collision.gameObject.GetComponent<BonusSystem>())
         {
             checkPoint = true;
         }
@@ -146,14 +146,17 @@ public class Char : MonoBehaviour
         }
         if (collision.gameObject.GetComponent<BonusSystem>() != null)
         {
-            Destroy(collision.gameObject);
-            if(HP != 3)
+            var bonus = collision.gameObject.GetComponent<BonusSystem>();
+            
+            if(bonus.MyType == BonusSystem.Type.live && HP != 3)
             {
                 GameManager.instance.lives[HP].enabled = true;
                 HP++;
                 Debug.Log(HP);
-                
+                Destroy(collision.gameObject);
             }
+            else
+                Destroy(collision.gameObject);
         }
     }
 
