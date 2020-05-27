@@ -39,17 +39,12 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    void Start()
+    private void Start()
     {
         Time.timeScale = 1;
         LevelGeneric();
         UpdateResourse();
         LinesActiv();
-    }
-
-    void Update()
-    {
-
     }
 
     public void UpdateResourse()

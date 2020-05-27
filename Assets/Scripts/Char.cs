@@ -14,7 +14,10 @@ public class Char : MonoBehaviour
     public int HP = 2;
 
 
-    private bool checkPoint, finish;
+    private bool checkPoint;
+    private bool finish;
+    private bool _isShield;
+
     private bool isCrashed = false;
 
     [SerializeField] private Transform finishPos;
@@ -144,6 +147,7 @@ public class Char : MonoBehaviour
             GameManager.instance.DestroyLevel();
             StartCoroutine(NextLevel());
         }
+
         if (collision.gameObject.GetComponent<BonusSystem>() != null)
         {
             var bonus = collision.gameObject.GetComponent<BonusSystem>();
@@ -155,14 +159,19 @@ public class Char : MonoBehaviour
                 Debug.Log(HP);
                 Destroy(collision.gameObject);
             }
-            else
+            else if (bonus.MyType == BonusSystem.Type.immunity)
+            {
+                _isShield = true;
+                colChar.isTrigger = true;
                 Destroy(collision.gameObject);
+            }
+                
         }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "death")
+        if (collision.gameObject.tag == "death" && !_isShield)
         {
             direction.x = 0;
             isCrashed = true;
@@ -185,6 +194,13 @@ public class Char : MonoBehaviour
         isCrashed = false;
         finish = false;
         colChar.enabled = false;
+            
+        if(_isShield == true)
+        {
+            colChar.isTrigger = false;
+            _isShield = false;
+        }
+        
         dirLeft -= 0.3f;
         dirRight += 0.3f;
         transform.DOMove(startPosition, 0.1f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
