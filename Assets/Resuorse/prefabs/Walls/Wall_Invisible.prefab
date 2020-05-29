@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2677954654505219688}
   - component: {fileID: 2677954654505219695}
   - component: {fileID: 2677954654505219690}
+  - component: {fileID: 5638058049478738928}
   m_Layer: 0
   m_Name: Wall_Invisible
   m_TagString: death
@@ -70,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: c79885da4d2dc4f06b5e0eab6b67a2b6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -127,3 +128,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5638058049478738928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2677954654505219694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77839e59afe3244b7a6bc554c074d553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myType: 2

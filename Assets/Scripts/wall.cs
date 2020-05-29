@@ -4,24 +4,19 @@ using UnityEngine;
 
 public class wall : MonoBehaviour
 {
-    public Animator anim;
-
-    public AnimationClip slideClip;
-
-    public Animation animationComponent;
-
     public enum WallType
     {
-        border,
-        obstacle,
-        slide
+        MoveLeft,
+        MoveRight,
+        Boarder,
+        Finish
     }
 
     public WallType myType;
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "char" )
+        if (collision.gameObject.GetComponent<Char>())
         {
             Destroy(collision.gameObject);
         }

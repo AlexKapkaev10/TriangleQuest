@@ -21,7 +21,7 @@ public class Char : MonoBehaviour
     private bool isCrashed = false;
 
     [SerializeField] private Transform finishPos;
-    [SerializeField] private float speed = 1;
+    [SerializeField] private float speed;
 
     private delegate void OnMove();
     private event OnMove OnMoved;
@@ -130,8 +130,6 @@ public class Char : MonoBehaviour
         if(collision.gameObject.tag == "left")
         {
             direction.x = dirLeft;
-            Debug.Log("yes");
-            
         }
         if (collision.gameObject.tag == "right")
         {
@@ -171,7 +169,7 @@ public class Char : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "death" && !_isShield)
+        if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.Boarder && !_isShield)
         {
             direction.x = 0;
             isCrashed = true;
@@ -203,7 +201,7 @@ public class Char : MonoBehaviour
         
         dirLeft -= 0.3f;
         dirRight += 0.3f;
-        transform.DOMove(startPosition, 0.1f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
+        transform.DOMove(startPosition, 0.2f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
         GameManager.instance.curLevel++;
         GameManager.instance.LevelGeneric();
         GameManager.instance.UpdateResourse();
