@@ -9,13 +9,17 @@ public class wall : MonoBehaviour
         MoveLeft,
         MoveRight,
         Boarder,
-        Finish
+        Finish,
+        CheckPoint
     }
 
     public WallType myType;
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (myType != WallType.Boarder)
+            return;
+
         if (collision.gameObject.GetComponent<Char>())
         {
             Destroy(collision.gameObject);

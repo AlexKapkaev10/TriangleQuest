@@ -6,21 +6,20 @@ using DG.Tweening;
 
 public class Char : MonoBehaviour
 {
-    private Vector2 direction = Vector2.zero;
+    private Vector2 _direction = Vector2.zero;
     Vector3 startPosition = Vector3.zero;
 
-    [SerializeField] private float dirLeft;
-    [SerializeField] private float dirRight;
+    [SerializeField] private float _dirLeft;
+    [SerializeField] private float _dirRight;
     public int HP = 2;
 
 
-    private bool checkPoint;
-    private bool finish;
+    private bool _checkPoint;
+    private bool _finish;
     private bool _isShield;
 
-    private bool isCrashed = false;
+    private bool _isCrashed = false;
 
-    [SerializeField] private Transform finishPos;
     [SerializeField] private float speed;
 
     private delegate void OnMove();
@@ -42,7 +41,7 @@ public class Char : MonoBehaviour
     private void Update()
     {
         MoveChar();
-        if (!isCrashed)
+        if (!_isCrashed)
         {
             MoveCharCheckPoint();
         }
@@ -58,11 +57,11 @@ public class Char : MonoBehaviour
     void MoveChar()
     {
 #if UNITY_EDITOR
-        if (!isCrashed)
+        if (!_isCrashed)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (!finish )
+                if (!_finish )
                     OnMoved();
             }
         }
@@ -85,24 +84,24 @@ public class Char : MonoBehaviour
     void MoveCharCheckPoint()
     {
 #if UNITY_EDITOR
-        if (!checkPoint)
+        if (!_checkPoint)
         {
-            transform.Translate(direction * Time.deltaTime);
+            transform.Translate(_direction * Time.deltaTime);
         }
 
-        if (checkPoint)
+        if (_checkPoint)
         {
             if (Input.GetKey(KeyCode.A))
             {
-                direction.x = -2;
-                if (!finish)
-                    transform.Translate(direction * Time.deltaTime);
+                _direction.x = -2;
+                if (!_finish)
+                    transform.Translate(_direction * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                direction.x = 2;
-                if (!finish)
-                    transform.Translate(direction * Time.deltaTime);
+                _direction.x = 2;
+                if (!_finish)
+                    transform.Translate(_direction * Time.deltaTime);
             }
         }
 
@@ -118,32 +117,30 @@ public class Char : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "checkPoint" || collision.gameObject.GetComponent<BonusSystem>())
-        {
-            checkPoint = true;
-        }
+        if(collision.gameObject.GetComponent<wall>().myType == wall.WallType.CheckPoint ||
+           collision.gameObject.GetComponent<BonusSystem>())
+            _checkPoint = true;
         else
+            _checkPoint = false;
+
+        if(collision.gameObject.GetComponent<wall>().myType == wall.WallType.MoveLeft)
+            _direction.x = _dirLeft;
+
+        if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.MoveRight)
         {
-            checkPoint = false;
+            _direction.x = _dirRight;
         }
 
-        if(collision.gameObject.tag == "left")
+        if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.Finish)
         {
-            direction.x = dirLeft;
-        }
-        if (collision.gameObject.tag == "right")
-        {
-            direction.x = dirRight;
-        }
+            _finish = true;
+            _direction.x = 0;
+            transform.DOMove(new Vector3(0, 4.7f, 0), 0.3f).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                GameManager.instance.DestroyLevel();
+                StartCoroutine(NextLevel());
+            });
 
-        if (collision.gameObject.tag == "finish")
-        {
-            finish = true;
-            direction.x = 0;
-            transform.DOMove(new Vector3(0, 4.7f, 0), 0.3f).SetEase(Ease.Linear);
-            transform.position = new Vector3(0, 4.7f, 0 * Time.deltaTime);
-            GameManager.instance.DestroyLevel();
-            StartCoroutine(NextLevel());
         }
 
         if (collision.gameObject.GetComponent<BonusSystem>() != null)
@@ -171,8 +168,8 @@ public class Char : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.Boarder && !_isShield)
         {
-            direction.x = 0;
-            isCrashed = true;
+            _direction.x = 0;
+            _isCrashed = true;
             
             HP--;
             if (HP != 0)
@@ -189,8 +186,8 @@ public class Char : MonoBehaviour
     IEnumerator NextLevel()
     {
         yield return new WaitForSeconds(1);
-        isCrashed = false;
-        finish = false;
+        _isCrashed = false;
+        _finish = false;
         colChar.enabled = false;
             
         if(_isShield == true)
@@ -199,9 +196,9 @@ public class Char : MonoBehaviour
             _isShield = false;
         }
         
-        dirLeft -= 0.3f;
-        dirRight += 0.3f;
-        transform.DOMove(startPosition, 0.2f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
+        _dirLeft -= 0.3f;
+        _dirRight += 0.3f;
+        transform.DOMove(startPosition, 0.5f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
         GameManager.instance.curLevel++;
         GameManager.instance.LevelGeneric();
         GameManager.instance.UpdateResourse();
@@ -211,8 +208,8 @@ public class Char : MonoBehaviour
     IEnumerator Restart()
     {
         yield return new WaitForSeconds(1);
-        isCrashed = false;
-        finish = false;
+        _isCrashed = false;
+        _finish = false;
         colChar.enabled = false;
         transform.DOMove(startPosition, 0.3f).SetEase(Ease.Linear).OnComplete(() => colChar.enabled = true);
     }
