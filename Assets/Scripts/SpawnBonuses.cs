@@ -6,7 +6,7 @@ public class SpawnBonuses : MonoBehaviour
 
     public void SpawnBonus(Vector2 position)
     {
-        if (GameManager.instance.curLevel < 3)
+        if (GameManager.instance.curLevel <= 5)
             return;
 
         int random = Random.Range(0, bonuses.Length);

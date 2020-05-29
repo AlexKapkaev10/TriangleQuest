@@ -1428,13 +1428,14 @@ MonoBehaviour:
   curLevel: 1
   charScript: {fileID: 695856881}
   currentLevel: {fileID: 0}
-  levels:
+  easyLevels:
   - {fileID: 743333273953886932, guid: 9074cc2931d7749288d53153b81b3300, type: 3}
   - {fileID: 743333273953886932, guid: 3e00be51dffb2456796843d7854f00f4, type: 3}
   - {fileID: 6142751526185729085, guid: 97112927453b9426b90fbd9da35972a9, type: 3}
   - {fileID: 1685138759615805426, guid: 4aecba9d0ab31441f9c8bf89bff1ab4d, type: 3}
   - {fileID: 2713602327611729057, guid: b157d0abfe3884d53a3728a78afca21d, type: 3}
   - {fileID: 7072681578947693813, guid: 9c8e9538ee40d41abafe2b839570e2cd, type: 3}
+  mediumLevels:
   - {fileID: 8610155234158196610, guid: d325bae51c8a047ab93cf52ba2ba52d3, type: 3}
   - {fileID: 7129297481997384495, guid: a8c0effeb2a6449ba8a6ebf5b6977a23, type: 3}
   - {fileID: 8297954749703384287, guid: 6a621b53eba5246769a1676b55b187c5, type: 3}

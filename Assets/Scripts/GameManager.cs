@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject currentLevel;
 
-    public GameObject[] levels;
+    public GameObject[] easyLevels;
+    public GameObject[] mediumLevels;
     Vector3 pointLevels;
 
     public GameObject[] lines;
@@ -54,8 +55,17 @@ public class GameManager : MonoBehaviour
 
     public void LevelGeneric()
     {
-        levelCount = Random.Range(1, GameManager.instance.levels.Length);
-        currentLevel = Instantiate(levels[levelCount], pointLevels, Quaternion.identity);
+        levelCount = Random.Range(1, GameManager.instance.easyLevels.Length);
+        if (curLevel < 5)
+        {
+            currentLevel = Instantiate(easyLevels[levelCount], pointLevels, Quaternion.identity);
+        }
+        else
+        {
+            currentLevel = Instantiate(mediumLevels[levelCount], pointLevels, Quaternion.identity);
+        }
+
+
         _bonusPos = new Vector2(Random.Range(_minSpawnBonusX, _maxSpawnBonusX), 0);
         spawnBonus.SpawnBonus(_bonusPos);
     }
@@ -76,6 +86,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
     public void ActivGameOver()
     {
         GameOver.SetActive(true);
