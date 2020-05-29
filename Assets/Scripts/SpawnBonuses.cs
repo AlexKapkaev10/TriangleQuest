@@ -6,7 +6,10 @@ public class SpawnBonuses : MonoBehaviour
 
     public void SpawnBonus(Vector2 position)
     {
-        int random = Random.RandomRange(0, bonuses.Length);
+        if (GameManager.instance.curLevel < 3)
+            return;
+
+        int random = Random.Range(0, bonuses.Length);
         GameObject bonus = Instantiate(bonuses[random], position, Quaternion.identity);
     }
 }
