@@ -6,10 +6,8 @@ public class SpawnBonuses : MonoBehaviour
 
     public void SpawnBonus(Vector2 position, bool isMake)
     {
-        /*
         if (GameManager.instance.curLevel <= 5)
             return;
-        */
         
         Debug.Log(isMake);
 

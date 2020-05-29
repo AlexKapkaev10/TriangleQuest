@@ -158,15 +158,15 @@ public class Char : MonoBehaviour
                 HP++;
                 Debug.Log(HP);
                 Destroy(collision.gameObject);
-                GameManager.instance.isPosibleSpawnBonuse = false;
             }
             else if (bonus.MyType == BonusSystem.Type.immunity)
             {
                 _isShield = true;
                 colChar.isTrigger = true;
                 Destroy(collision.gameObject);
-                GameManager.instance.isPosibleSpawnBonuse = false;
             }
+            GameManager.instance.isPosibleSpawnBonuse = false;
+            Destroy(collision.gameObject);
         }
         
     }
