@@ -11,5 +11,4 @@ public class BonusSystem : MonoBehaviour
     }
 
     public Type MyType;
-
 }

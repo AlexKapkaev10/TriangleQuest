@@ -11,6 +11,7 @@ public class Char : MonoBehaviour
 
     [SerializeField] private float _dirLeft;
     [SerializeField] private float _dirRight;
+    [SerializeField] private float _stepSpeed;
     public int HP = 2;
 
 
@@ -20,7 +21,7 @@ public class Char : MonoBehaviour
 
     private bool _isCrashed = false;
 
-    [SerializeField] private float speed;
+    public float speed;
 
     private delegate void OnMove();
     private event OnMove OnMoved;
@@ -117,34 +118,38 @@ public class Char : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.GetComponent<wall>().myType == wall.WallType.CheckPoint ||
-           collision.gameObject.GetComponent<BonusSystem>())
-            _checkPoint = true;
-        else
-            _checkPoint = false;
-
-        if(collision.gameObject.GetComponent<wall>().myType == wall.WallType.MoveLeft)
-            _direction.x = _dirLeft;
-
-        if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.MoveRight)
+        if(collision.gameObject.GetComponent<wall>() != null)
         {
-            _direction.x = _dirRight;
-        }
+            if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.CheckPoint ||
+                collision.gameObject.GetComponent<BonusSystem>())
+                _checkPoint = true;
+            else
+                _checkPoint = false;
 
-        if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.Finish)
-        {
-            _finish = true;
-            _direction.x = 0;
-            transform.DOMove(new Vector3(0, 4.7f, 0), 0.3f).SetEase(Ease.Linear).OnComplete(() =>
+            if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.MoveLeft)
+                _direction.x = _dirLeft;
+
+            if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.MoveRight)
             {
-                GameManager.instance.DestroyLevel();
-                StartCoroutine(NextLevel());
-            });
+                _direction.x = _dirRight;
+            }
 
+            if (collision.gameObject.GetComponent<wall>().myType == wall.WallType.Finish)
+            {
+                _finish = true;
+                _direction.x = 0;
+                transform.DOMove(new Vector3(0, 4.7f, 0), 0.3f).SetEase(Ease.Linear).OnComplete(() =>
+                {
+                    GameManager.instance.DestroyLevel();
+                    StartCoroutine(NextLevel());
+                });
+
+            }
         }
 
-        if (collision.gameObject.GetComponent<BonusSystem>() != null)
+        else if (collision.gameObject.GetComponent<BonusSystem>() != null)
         {
+            
             var bonus = collision.gameObject.GetComponent<BonusSystem>();
             
             if(bonus.MyType == BonusSystem.Type.live && HP != 3)
@@ -153,15 +158,17 @@ public class Char : MonoBehaviour
                 HP++;
                 Debug.Log(HP);
                 Destroy(collision.gameObject);
+                GameManager.instance.isPosibleSpawnBonuse = false;
             }
             else if (bonus.MyType == BonusSystem.Type.immunity)
             {
                 _isShield = true;
                 colChar.isTrigger = true;
                 Destroy(collision.gameObject);
+                GameManager.instance.isPosibleSpawnBonuse = false;
             }
-                
         }
+        
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -183,6 +190,7 @@ public class Char : MonoBehaviour
 
         }
     }
+
     IEnumerator NextLevel()
     {
         yield return new WaitForSeconds(1);
@@ -195,14 +203,15 @@ public class Char : MonoBehaviour
             colChar.isTrigger = false;
             _isShield = false;
         }
-        
-        _dirLeft -= 0.3f;
-        _dirRight += 0.3f;
+        if(speed < 5)
+        {
+            _dirLeft -= _stepSpeed;
+            _dirRight += _stepSpeed;
+            speed = _dirRight;
+        }
+
         transform.DOMove(startPosition, 0.5f).SetEase(Ease.Linear).OnComplete(()=> colChar.enabled = true);
-        GameManager.instance.curLevel++;
-        GameManager.instance.LevelGeneric();
-        GameManager.instance.UpdateResourse();
-        GameManager.instance.LinesActiv();
+        GameManager.instance.LevelUp();
     }
 
     IEnumerator Restart()

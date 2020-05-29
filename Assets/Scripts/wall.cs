@@ -14,7 +14,7 @@ public class wall : MonoBehaviour
     }
 
     public WallType myType;
-
+    /*
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (myType != WallType.Boarder)
@@ -25,4 +25,5 @@ public class wall : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+    */
 }
